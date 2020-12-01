@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ImpotController!{% endblock %}
+
+{% block body %}
+    {{ form(form) }}
+    {{ dump(impot) }}
+
+    {% if impot and impot.montantImpot is defined %}
+        <div>
+            <p>Montant impot <span id="montantImpot">{{ impot.montantImpot }}</span></p>
+        </div>
+        <ul>
+            {% for index, item in impot.impotParTranche %}
+                <li>Tranche {{ index }} : {{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
