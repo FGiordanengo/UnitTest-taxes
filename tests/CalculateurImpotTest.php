@@ -41,7 +41,7 @@ class CalculateurImpotTest extends TestCase
     {
         $resultat = $this->calculateurImpot->calcul($revenu, $nbPart);
 
-        $this->assertSame($montantImpotParTranche, $resultat['impotParTranche']);
+        $this->assertTrue($montantImpotParTranche, $resultat['impotParTranche']);
     }
 
     public function getSampleImpot()
