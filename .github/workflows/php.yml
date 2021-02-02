@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -39,18 +38,49 @@ jobs:
       # run: composer run-script test
       run: php bin/phpunit
 
-    - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        coverage: xdebug
+  coverage:
+    runs-on: ubuntu-latest
 
-    - name: Coverage
-      run: php bin/phpunit --coverage-clover=coverage.xml
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Check test coverage
-      id: test-coverage
-      uses: johanvanhelden/gha-clover-test-coverage-check@v1
-      with:
-        percentage: "60"
-        filename: "coverage.xml"
+      - name: Update composer.lock
+        run: composer update
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: xdebug
+
+      - name: Coverage
+        run: php bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Check test coverage
+        id: test-coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        with:
+          percentage: "60"
+          filename: "coverage.xml"
+
+  phplint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: michaelw90/PHP-Lint@master
