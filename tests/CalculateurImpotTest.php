@@ -48,7 +48,6 @@ class CalculateurImpotTest extends TestCase
     {
         return [
             [32000, 1, 3617],
-            [32000, 1, 3617],
             [55950, 3, 2833],
         ];
     }
