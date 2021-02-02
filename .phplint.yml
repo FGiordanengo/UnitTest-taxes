@@ -1,0 +1,4 @@
+path: ./src
+extensions:
+  - php
+warning: true
