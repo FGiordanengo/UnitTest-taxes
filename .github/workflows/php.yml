@@ -46,4 +46,11 @@ jobs:
         coverage: xdebug
 
     - name: Coverage
-      run: php bin/phpunit --coverage-php /tests/coverage
+      run: php bin/phpunit --coverage-clover=coverage.xml
+
+    - name: Check test coverage
+      id: test-coverage
+      uses: johanvanhelden/gha-clover-test-coverage-check@v1
+      with:
+        percentage: "60"
+        filename: "coverage.xml"
