@@ -13,12 +13,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        files: ./coverage1.xml,./coverage2.xml # optional
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
 
     - name: Validate composer.json and composer.lock
+      run: composer update
+      
+    - name: Update composer.lock
       run: composer validate
 
     - name: Cache Composer packages
-      id: composer-cache
+      id: composer-cache 
       uses: actions/cache@v2
       with:
         path: vendor
@@ -33,5 +44,6 @@ jobs:
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
-    # - name: Run test suite
+    - name: Run test suite
+      run: php bin/phpunit
     #   run: composer run-script test
