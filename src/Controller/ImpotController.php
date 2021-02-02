@@ -27,7 +27,7 @@ class ImpotController extends AbstractController
 
         $form->handleRequest($request);
         $result = [];
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $revenu = $data['revenu'];
             $nbPart = $data['nbPart'];
